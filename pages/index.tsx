@@ -1,4 +1,4 @@
-import React from "react";
+import React, { useRef, useLayoutEffect } from "react";
 import Link from "next/link";
 import Layout from "../components/common/Layout";
 
@@ -15,8 +15,17 @@ import { withUrqlClient } from "next-urql";
 import { createUrqlClient } from "../utils/createUrqlClient";
 
 import styles from "../styles/Home.module.css";
+import drawCanvas from "../utils/drawWave";
 
 const Home: React.FC<{}> = ({}) => {
+  const canvas = useRef(null);
+  const canvas2 = useRef(null);
+
+  useLayoutEffect(() => {
+    drawCanvas(canvas.current);
+    drawCanvas(canvas2.current);
+  }, []);
+
   return (
     <>
       <Layout title={"Lireddit | Home"}>
@@ -30,6 +39,8 @@ const Home: React.FC<{}> = ({}) => {
           >
             <div className={styles.background}>
               <img src="/assets/images/background.jpg" alt="." />
+              <canvas ref={canvas} className={styles.canvas} />
+              <canvas ref={canvas2} className={styles.canvas2} />
             </div>
             <Paper
               className={`${styles["p-box"]} ${styles["mb-1_5"]}`}
