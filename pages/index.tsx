@@ -14,7 +14,7 @@ import {
 import { withUrqlClient } from "next-urql";
 import { createUrqlClient } from "../utils/createUrqlClient";
 
-import styles from "../styles/Home.module.css";
+import styles from "../styles/Base.module.css";
 import BackWallpaper from "../components/common/BackWallpaper/index";
 
 import { useRouter } from "next/router";
@@ -42,7 +42,7 @@ const Home: React.FC<{}> = ({}) => {
           >
             <BackWallpaper />
             <Paper
-              className={`${styles["p-box"]} ${styles["mb-1_5"]}`}
+              className={`p-box mb-1_5`}
               elevation={2}
               variant="elevation"
               component={(props) => <Link {...props} href="/news-feed" />}

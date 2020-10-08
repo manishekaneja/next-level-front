@@ -1,4 +1,4 @@
-import React, { ChangeEvent, useCallback } from "react";
+import React, { ChangeEvent } from "react";
 import { useRecoilValue } from "recoil";
 import { registerFormValues } from "../../recoil/selectors/registerSelectors";
 import CommonInput from "../common/CommonInput";

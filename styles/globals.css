@@ -14,3 +14,10 @@ a {
 * {
   box-sizing: border-box;
 }
+
+.p-box {
+  padding: 0.5rem 1rem;
+}
+.mb-1_5 {
+  margin-bottom: 1.5rem;
+}
