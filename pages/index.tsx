@@ -1,4 +1,4 @@
-import React from "react";
+import React, { useCallback } from "react";
 import Link from "next/link";
 import Layout from "../components/common/Layout";
 
@@ -15,8 +15,20 @@ import { withUrqlClient } from "next-urql";
 import { createUrqlClient } from "../utils/createUrqlClient";
 
 import styles from "../styles/Home.module.css";
+import BackWallpaper from "../components/common/BackWallpaper/index";
+
+import { useRouter } from "next/router";
 
 const Home: React.FC<{}> = ({}) => {
+  const router = useRouter();
+  const goto = useCallback(
+    (href: string) => {
+      if (href && typeof href === "string" && href.length > 0) {
+        router.push(href);
+      }
+    },
+    [router]
+  );
   return (
     <>
       <Layout title={"Lireddit | Home"}>
@@ -28,9 +40,7 @@ const Home: React.FC<{}> = ({}) => {
             justifyContent="center"
             alignItems="center"
           >
-            <div className={styles.background}>
-              <img src="/assets/images/background.jpg" alt="." />
-            </div>
+            <BackWallpaper />
             <Paper
               className={`${styles["p-box"]} ${styles["mb-1_5"]}`}
               elevation={2}
@@ -47,7 +57,7 @@ const Home: React.FC<{}> = ({}) => {
               color="primary"
               aria-label="outlined primary button group"
             >
-              <Button variant="outlined">
+              <Button variant="outlined" onClick={() => goto("/login")}>
                 <Typography
                   variant="subtitle1"
                   component="span"
@@ -56,7 +66,7 @@ const Home: React.FC<{}> = ({}) => {
                   Login
                 </Typography>
               </Button>
-              <Button variant="outlined" href="/register">
+              <Button variant="outlined" onClick={() => goto("/register")}>
                 <Typography
                   variant="subtitle1"
                   className={`${styles["mw-75"]} ${styles.center}`}

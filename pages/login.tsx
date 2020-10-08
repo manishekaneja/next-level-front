@@ -6,8 +6,8 @@ import BackWallpaper from "../components/common/BackWallpaper";
 interface RegisterProps {}
 const Regsiter: React.FC<RegisterProps> = () => {
   return (
-    <Layout title="Lireddit | Register">
-      <BackWallpaper />
+    <Layout title="Lireddit | Login">
+      <BackWallpaper opacity={0.7} />
       <RegsiterForm />
     </Layout>
   );
