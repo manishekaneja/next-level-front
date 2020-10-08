@@ -1,0 +1,15 @@
+.background,
+.canvas,
+.canvas2 {
+  width: 100vw;
+  height: 100vh;
+  position: fixed;
+  bottom: 0px;
+  z-index: 5;
+}
+.canvas2 {
+  translate: rotate(90deg);
+}
+.background {
+  z-index: -1;
+}
