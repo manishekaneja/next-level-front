@@ -1,79 +1,75 @@
 import React, { ChangeEvent } from "react";
-import { useRecoilState, RecoilState } from "recoil";
-import { InputAtom } from "../../recoil/atoms/registerAtoms";
+import {
+  FormControl,
+  InputLabel,
+  Input,
+  FormHelperText,
+  TextField,
+} from "@material-ui/core";
 
 interface CommonInputProps {
-  stateKey: RecoilState<InputAtom<any>>;
   type?: string;
   placeholder: string;
   name: string;
   label: string;
   validator?: Function;
+  update?: Function;
+  value: string;
+  defaultValue?: string;
+  hint?: string;
+  disabled?: boolean;
+  isValid?: boolean;
+  error?: string;
 }
 
 const CommonInput: React.FC<CommonInputProps> = ({
-  stateKey,
   type,
   placeholder,
+  value,
+  disabled,
+  update,
   name,
   label,
+  hint,
   validator,
+  isValid,
+  error,
 }) => {
-  const [inputObject, updateValue] = useRecoilState<InputAtom<any>>(stateKey);
   const onChange = (event: ChangeEvent<HTMLInputElement>) => {
     const value = event.target.value;
-    const isValid = validator(event.target.value);
-    updateValue({
-      ...inputObject,
-      value,
-      isValid,
-      touched: true,
-      dirty: true,
-      error: isValid ? "" : "Please enter a correct value",
-    });
+    // const isValid = validator(event.target.value);
+    update(value);
   };
   const onFocus = () => {
-    updateValue({
-      ...inputObject,
-      touched: true,
-    });
+    // updateValue({
+    //   ...inputObject,
+    //   touched: true,
+    // });
   };
 
   return (
     <>
-      <style jsx>{`
-        .form-control {
-          display: block;
-        }
-        .form-control > label {
-          font-size: 1.2rem;
-          display: block;
-        }
-        .form-control > input {
-          display: block;
-          border: none;
-          box-shadow: 0.2px 0.24px 0.1px #222;
-          height: 1.4rem;
-          font-size: 1.2rem;
-        }
-      `}</style>
-      <div className="form-control">
-        <label htmlFor={name}>{label}</label>
-        <input
-          {...{
-            value: inputObject.value,
-            onChange,
-            onFocus,
-            type,
-            placeholder,
-            name,
-          }}
+      <FormControl className={`mb_22`} fullWidth>
+        <TextField
+          variant="outlined"
+          label={label}
+          InputLabelProps={{ shrink: true }}
+          helperText={isValid ? (hint ? hint : "") : error}
+          error={!isValid}
+          value={value}
+          onChange={onChange}
+          onFocus={onFocus}
+          type={type}
+          disabled={disabled}
+          placeholder={placeholder}
+          name={name}
+          FormHelperTextProps={isValid ? {} : { error: !isValid }}
         />
-        {inputObject.touched &&
+      </FormControl>
+      {/* {inputObject.touched &&
           inputObject.dirty &&
           !inputObject.isValid &&
-          inputObject.error}
-      </div>
+          inputObject.error} */}
     </>
   );
 };

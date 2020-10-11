@@ -1,34 +1,23 @@
-import React, { useCallback } from "react";
-import Link from "next/link";
-import Layout from "../components/common/Layout";
-
 import {
-  Container,
   Box,
-  Typography,
-  Paper,
   Button,
   ButtonGroup,
+  Container,
+  Paper,
+  Typography,
 } from "@material-ui/core";
-
 import { withUrqlClient } from "next-urql";
-import { createUrqlClient } from "../utils/createUrqlClient";
-
-import styles from "../styles/Home.module.css";
+import Link from "next/link";
+import React from "react";
 import BackWallpaper from "../components/common/BackWallpaper/index";
-
-import { useRouter } from "next/router";
+import Layout from "../components/common/Layout";
+import styles from "../styles/Base.module.css";
+import { createUrqlClient } from "../utils/createUrqlClient";
+import useGoto from "../utils/customHook/useGoto";
+import RoutesEndpoints from "../utils/constants/routes";
 
 const Home: React.FC<{}> = ({}) => {
-  const router = useRouter();
-  const goto = useCallback(
-    (href: string) => {
-      if (href && typeof href === "string" && href.length > 0) {
-        router.push(href);
-      }
-    },
-    [router]
-  );
+  const goto = useGoto();
   return (
     <>
       <Layout title={"Lireddit | Home"}>
@@ -42,7 +31,7 @@ const Home: React.FC<{}> = ({}) => {
           >
             <BackWallpaper />
             <Paper
-              className={`${styles["p-box"]} ${styles["mb-1_5"]}`}
+              className={`p-box mb_22`}
               elevation={2}
               variant="elevation"
               component={(props) => <Link {...props} href="/news-feed" />}
@@ -57,7 +46,10 @@ const Home: React.FC<{}> = ({}) => {
               color="primary"
               aria-label="outlined primary button group"
             >
-              <Button variant="outlined" onClick={() => goto("/login")}>
+              <Button
+                variant="outlined"
+                onClick={() => goto(RoutesEndpoints.LOGIN)}
+              >
                 <Typography
                   variant="subtitle1"
                   component="span"
@@ -66,7 +58,10 @@ const Home: React.FC<{}> = ({}) => {
                   Login
                 </Typography>
               </Button>
-              <Button variant="outlined" onClick={() => goto("/register")}>
+              <Button
+                variant="outlined"
+                onClick={() => goto(RoutesEndpoints.REGISTER)}
+              >
                 <Typography
                   variant="subtitle1"
                   className={`${styles["mw-75"]} ${styles.center}`}
