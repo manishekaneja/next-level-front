@@ -42,15 +42,7 @@ const Login: React.FC<LoginProps> = () => {
                 align="center"
                 className={`medium c_333`}
               >
-                Welcome User
-              </Typography>
-              <Typography
-                variant="overline"
-                align="center"
-                style={{ width: "100%", display: "inline-block" }}
-                className={`medium c_454545`}
-              >
-                Excited to see you here.
+                Reset Password
               </Typography>
             </div>
             <Divider />
@@ -59,39 +51,23 @@ const Login: React.FC<LoginProps> = () => {
                 formIdentifier="login_form"
                 fields={[
                   {
-                    label: "USERNAME/E-MAIL",
-                    name: "username",
-                    placeholder: "identify_you_as.",
-                    type: "text",
+                    label: "NEW PASSWORD",
+                    name: "password",
+                    type: "password",
                   },
                   {
-                    label: "PASSWORD",
-                    name: "password",
-                    placeholder: "your_private_key",
+                    label: "CONFIRM PASSWORD",
+                    name: "confirm_password",
                     type: "password",
                   },
                 ]}
-                submit={<Typography variant="overline">Login</Typography>}
-                onSubmit={(value: any) => goto(RoutesEndpoints.NEWS_FEED)}
-                footer={
-                  <>
-                    <Button
-                      style={{ marginTop: 10 }}
-                      variant="outlined"
-                      fullWidth
-                      onClick={() => goto(RoutesEndpoints.RESET_PASSWORD)}
-                    >
-                      <Typography variant="overline">
-                        Forgot Password??
-                      </Typography>
-                    </Button>
-                    <Link href="/register">
-                      <Typography variant="overline">
-                        First Time User??
-                      </Typography>
-                    </Link>
-                  </>
+                submit={
+                  <Typography variant="overline">Reset Password</Typography>
                 }
+                onSubmit={(value: any) => {
+                  console.log({ value });
+                  goto(RoutesEndpoints.LOGIN);
+                }}
               />
             </div>
           </Paper>

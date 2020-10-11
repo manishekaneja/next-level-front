@@ -18,6 +18,50 @@ a {
 .p-box {
   padding: 0.5rem 1rem;
 }
-.mb-1_5 {
-  margin-bottom: 1.5rem;
+.mb_22 {
+  margin-bottom: 22px !important;
+}
+
+.op7 {
+  opacity: 0.7;
+}
+
+.p_10 {
+  padding: 15px 30px 25px;
+}
+
+.p_20 {
+  padding: 15px 35px 35px;
+}
+
+.px_10 {
+  padding: 0px 10px;
+}
+
+.py_10 {
+  padding: 10px 0px;
+}
+
+.py_20 {
+  padding: 20px 0px;
+}
+
+.bold {
+  font-weight: bold !important;
+}
+
+.medium {
+  font-weight: 600 !important;
+}
+
+.bolder {
+  font-weight: bolder !important;
+}
+
+.c_333 {
+  color: #333;
+}
+
+.c_454545 {
+  color: #454545;
 }

@@ -4,6 +4,7 @@ import {
   InputLabel,
   Input,
   FormHelperText,
+  TextField,
 } from "@material-ui/core";
 
 interface CommonInputProps {
@@ -48,33 +49,27 @@ const CommonInput: React.FC<CommonInputProps> = ({
 
   return (
     <>
-      <div className="form-control">
-        <FormControl>
-          <InputLabel htmlFor={name}>{label}</InputLabel>
-          <Input
-            {...{
-              error: !isValid,
-              id: name,
-              value,
-              onChange,
-              onFocus,
-              type,
-              disabled,
-              placeholder,
-              name,
-            }}
-          />
-          {hint && (
-            <FormHelperText error={!isValid}>
-              {isValid ? hint : error}
-            </FormHelperText>
-          )}
-        </FormControl>
-        {/* {inputObject.touched &&
+      <FormControl className={`mb_22`} fullWidth>
+        <TextField
+          variant="outlined"
+          label={label}
+          InputLabelProps={{ shrink: true }}
+          helperText={isValid ? (hint ? hint : "") : error}
+          error={!isValid}
+          value={value}
+          onChange={onChange}
+          onFocus={onFocus}
+          type={type}
+          disabled={disabled}
+          placeholder={placeholder}
+          name={name}
+          FormHelperTextProps={isValid ? {} : { error: !isValid }}
+        />
+      </FormControl>
+      {/* {inputObject.touched &&
           inputObject.dirty &&
           !inputObject.isValid &&
           inputObject.error} */}
-      </div>
     </>
   );
 };

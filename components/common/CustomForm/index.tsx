@@ -17,12 +17,16 @@ interface CustomFormProps {
   fields: Array<FieldObject>;
   submit?: ReactNode;
   formIdentifier: string;
+  onSubmit: Function;
+  footer?: ReactNode;
 }
 
 const CustomForm: React.FC<CustomFormProps> = ({
   formIdentifier,
   submit,
   fields,
+  onSubmit,
+  footer,
 }) => {
   const [inputArray, updateArray] = useState(
     fields.map(
@@ -46,15 +50,15 @@ const CustomForm: React.FC<CustomFormProps> = ({
     [updateArray]
   );
 
-  const onSubmit = async (event: ChangeEvent<HTMLFormElement>) => {
+  const _onSubmit = async (event: ChangeEvent<HTMLFormElement>) => {
     event.preventDefault();
-    console.log("On Submit", inputArray);
+    onSubmit(inputArray);
   };
 
   const formIdef = formIdentifier.split(" ").join("_");
 
   return (
-    <form {...{ onSubmit }} noValidate>
+    <form {...{ onSubmit: _onSubmit }} noValidate>
       {inputArray.map((fieldObject, index) => (
         <CommonInput
           key={index}
@@ -69,15 +73,16 @@ const CustomForm: React.FC<CustomFormProps> = ({
           }}
         />
       ))}
-      {submit ? (
-        <Button variant="text">{submit}</Button>
-      ) : (
-        <Button type="submit" variant="outlined">
-          Submit Form
-        </Button>
-      )}
+      <br />
+      <Button type="submit" variant="contained" color="primary" fullWidth>
+        {submit ? submit : "Submit"}
+      </Button>
+      {footer}
     </form>
   );
+};
+CustomForm.defaultProps = {
+  footer: null,
 };
 
 export default CustomForm;
