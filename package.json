@@ -5,8 +5,9 @@
   "scripts": {
     "dev": "next dev",
     "build": "next build",
-    "start": "next start",
-    "gen": "graphql-codegen --config codegen.yml"
+    "start": "next start --port 80",
+    "gen": "graphql-codegen --config codegen.yml",
+    "gcp-build": "yarn build"
   },
   "dependencies": {
     "@material-ui/core": "^4.11.0",
