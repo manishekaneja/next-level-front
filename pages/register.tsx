@@ -7,6 +7,7 @@ import {
   Typography,
 } from "@material-ui/core";
 import { withUrqlClient } from "next-urql";
+import { useRouter } from "next/router";
 import React, { useCallback, useEffect } from "react";
 import { useSetRecoilState } from "recoil";
 import validator from "validator";
@@ -17,7 +18,7 @@ import { useRegisterMutation } from "../graphql-tsx-gen/graphql";
 import { loaderAtom } from "../recoil/atoms/loadingAtom";
 import { snackbarAtom } from "../recoil/atoms/snackbarAtom";
 import styles from "../styles/account.module.css";
-import Routes from "../utils/constants/routes";
+import RoutesEndpoints from "../utils/constants/routes";
 import { createUrqlClient } from "../utils/createUrqlClient";
 import useGoto from "../utils/customHook/useGoto";
 
@@ -27,6 +28,7 @@ function useRegisterActionHook() {
   useEffect(() => {
     setLoader(fetching);
   }, [fetching]);
+  const router = useRouter();
   const setSnackbarObject = useSetRecoilState(snackbarAtom);
   const onSubmit = useCallback((value: any) => {
     registerAction({
@@ -56,6 +58,7 @@ function useRegisterActionHook() {
             });
             return;
           }
+          router.push(RoutesEndpoints.NEWS_FEED);
         }
       )
       .catch((error) => {
@@ -74,7 +77,7 @@ const Regsiter: React.FC<RegisterProps> = () => {
   const goto = useGoto();
   const { onSubmit } = useRegisterActionHook();
   return (
-    <Layout title="Lireddit | Register">
+    <Layout title="Lireddit | Register" screenType="for_unverified_user">
       <Container maxWidth="sm">
         <BackWallpaper />
         <Box
@@ -168,7 +171,7 @@ const Regsiter: React.FC<RegisterProps> = () => {
                     style={{ marginTop: 10 }}
                     variant="outlined"
                     fullWidth
-                    onClick={() => goto(Routes.LOGIN)}
+                    onClick={() => goto(RoutesEndpoints.LOGIN)}
                   >
                     <Typography variant="overline">
                       Already Have An Account

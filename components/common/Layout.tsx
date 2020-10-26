@@ -1,16 +1,21 @@
 import { CssBaseline, LinearProgress } from "@material-ui/core";
 import Head from "next/head";
+import { useRouter } from "next/router";
 import React, { useEffect } from "react";
-import { useRecoilValue } from "recoil";
+import { useRecoilState, useRecoilValue } from "recoil";
 import { loaderAtom } from "../../recoil/atoms/loadingAtom";
+import { userAtom } from "../../recoil/atoms/userAtom";
+import { isBrowser } from "../../utils/constants/basic";
+import RoutesEndpoints from "../../utils/constants/routes";
 import ShowSnackbar from "./ShowSnackbar";
 
 interface LayoutProps {
   children: React.ReactNode;
   title: string;
+  screenType: "for_verified_user" | "for_unverified_user" | "for_all";
 }
 
-const Layout: React.FC<LayoutProps> = ({ children, title }) => {
+const Layout: React.FC<LayoutProps> = ({ children, title, screenType }) => {
   useEffect(() => {
     const jssStyles = document.querySelector("#jss-server-side");
     if (jssStyles) {
@@ -18,7 +23,21 @@ const Layout: React.FC<LayoutProps> = ({ children, title }) => {
     }
   }, []);
 
+  const router = useRouter();
   const loading = useRecoilValue(loaderAtom);
+  const user = useRecoilState(userAtom);
+  // if (isBrowser) {
+  //   if (screenType === "for_verified_user") {
+  //     if (user === null) {
+  //       router.replace(RoutesEndpoints.LOGIN);
+  //     }
+  //   }
+  //   if (screenType === "for_unverified_user") {
+  //     if (user !== null) {
+  //       router.replace(RoutesEndpoints.NEWS_FEED);
+  //     }
+  //   }
+  // }
   return (
     <>
       <Head>

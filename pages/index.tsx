@@ -20,7 +20,7 @@ const Home: React.FC<{}> = ({}) => {
   const goto = useGoto();
   return (
     <>
-      <Layout title={"Lireddit | Home"}>
+      <Layout title={"Lireddit | Home"} screenType="for_unverified_user">
         <Container maxWidth="lg">
           <Box
             className={styles.container}
