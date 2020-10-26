@@ -1,24 +1,18 @@
+import { FormControl, TextField } from "@material-ui/core";
 import React, { ChangeEvent } from "react";
-import {
-  FormControl,
-  InputLabel,
-  Input,
-  FormHelperText,
-  TextField,
-} from "@material-ui/core";
-
 interface CommonInputProps {
   type?: string;
   placeholder: string;
   name: string;
   label: string;
-  validator?: Function;
+  validate?: Function;
   update?: Function;
   value: string;
   defaultValue?: string;
   hint?: string;
   disabled?: boolean;
   isValid?: boolean;
+  fieldTouched?: Function;
   error?: string;
 }
 
@@ -31,20 +25,20 @@ const CommonInput: React.FC<CommonInputProps> = ({
   name,
   label,
   hint,
-  validator,
+  validate,
   isValid,
   error,
+  fieldTouched,
 }) => {
   const onChange = (event: ChangeEvent<HTMLInputElement>) => {
     const value = event.target.value;
-    // const isValid = validator(event.target.value);
     update(value);
   };
+  const onBlur = () => {
+    validate();
+  };
   const onFocus = () => {
-    // updateValue({
-    //   ...inputObject,
-    //   touched: true,
-    // });
+    fieldTouched();
   };
 
   return (
@@ -58,6 +52,7 @@ const CommonInput: React.FC<CommonInputProps> = ({
           error={!isValid}
           value={value}
           onChange={onChange}
+          onBlur={onBlur}
           onFocus={onFocus}
           type={type}
           disabled={disabled}
@@ -66,16 +61,12 @@ const CommonInput: React.FC<CommonInputProps> = ({
           FormHelperTextProps={isValid ? {} : { error: !isValid }}
         />
       </FormControl>
-      {/* {inputObject.touched &&
-          inputObject.dirty &&
-          !inputObject.isValid &&
-          inputObject.error} */}
     </>
   );
 };
 
 CommonInput.defaultProps = {
-  validator: () => true,
+  validate: () => "",
   type: "text",
 };
 

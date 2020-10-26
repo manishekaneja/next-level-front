@@ -1,5 +1,5 @@
-import { useCallback } from "react";
 import { useRouter } from "next/router";
+import { useCallback } from "react";
 
 function useGoto() {
   const router = useRouter();
