@@ -75,7 +75,7 @@ const Login: React.FC<LoginProps> = () => {
   const { onSubmit } = useLoginActionHook();
 
   return (
-    <Layout title="Lireddit | Login">
+    <Layout title="Lireddit | Login" screenType="for_unverified_user">
       <Container maxWidth="sm">
         <BackWallpaper />
         <Box

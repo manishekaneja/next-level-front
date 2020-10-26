@@ -1,7 +1,7 @@
 import { IconButton, Snackbar } from "@material-ui/core";
 import CloseIcon from "@material-ui/icons/Close";
 import React, { useEffect } from "react";
-import { useRecoilState } from "recoil";
+import { useRecoilValue, useResetRecoilState } from "recoil";
 import { snackbarAtom } from "../../../recoil/atoms/snackbarAtom";
 
 interface ShowSnackbar {}
@@ -13,14 +13,15 @@ const ShowSnackbar: React.FC<ShowSnackbar> = ({}) => {
       jssStyles.parentElement.removeChild(jssStyles);
     }
   }, []);
-  const [snackbarObject, updateSnackbarObject] = useRecoilState(snackbarAtom);
+  const snackbarObject = useRecoilValue(snackbarAtom);
+  const resetSnackbarObject = useResetRecoilState(snackbarAtom);
   const handleClose = (event, reason) => {
     if (reason === "clickaway") {
       return;
     }
-    updateSnackbarObject({ open: false, message: "" });
+    resetSnackbarObject();
   };
-
+  console.log(snackbarObject);
   return (
     <Snackbar
       anchorOrigin={{

@@ -13,11 +13,10 @@ mutation Register(
     }
   ) {
     user {
-      username
+      ...RegularUser
     }
     errors {
-      message
-      field
+      ...RegularError
     }
   }
 }

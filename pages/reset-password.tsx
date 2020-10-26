@@ -13,7 +13,7 @@ interface LoginProps {}
 const Login: React.FC<LoginProps> = () => {
   const goto = useGoto();
   return (
-    <Layout title="Lireddit | Login">
+    <Layout title="Lireddit | Login" screenType="for_all">
       <Container maxWidth="sm">
         <BackWallpaper />
         <Box
