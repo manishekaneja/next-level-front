@@ -18,10 +18,7 @@ import { useRegisterMutation } from "../graphql-tsx-gen/graphql";
 import { loaderAtom } from "../recoil/atoms/loadingAtom";
 import { snackbarAtom } from "../recoil/atoms/snackbarAtom";
 import styles from "../styles/account.module.css";
-import {
-  default as Routes,
-  default as RoutesEndpoints,
-} from "../utils/constants/routes";
+import RoutesEndpoints from "../utils/constants/routes";
 import { createUrqlClient } from "../utils/createUrqlClient";
 import useGoto from "../utils/customHook/useGoto";
 
@@ -174,7 +171,7 @@ const Regsiter: React.FC<RegisterProps> = () => {
                     style={{ marginTop: 10 }}
                     variant="outlined"
                     fullWidth
-                    onClick={() => goto(Routes.LOGIN)}
+                    onClick={() => goto(RoutesEndpoints.LOGIN)}
                   >
                     <Typography variant="overline">
                       Already Have An Account
