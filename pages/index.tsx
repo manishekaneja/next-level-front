@@ -12,9 +12,9 @@ import React from "react";
 import BackWallpaper from "../components/common/BackWallpaper/index";
 import Layout from "../components/common/Layout";
 import styles from "../styles/Base.module.css";
+import RoutesEndpoints from "../utils/constants/routes";
 import { createUrqlClient } from "../utils/createUrqlClient";
 import useGoto from "../utils/customHook/useGoto";
-import RoutesEndpoints from "../utils/constants/routes";
 
 const Home: React.FC<{}> = ({}) => {
   const goto = useGoto();

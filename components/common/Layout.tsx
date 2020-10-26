@@ -1,8 +1,9 @@
-import React, { useEffect } from "react";
-import { RecoilRoot } from "recoil";
+import { CssBaseline, LinearProgress } from "@material-ui/core";
 import Head from "next/head";
-
-import { CssBaseline } from "@material-ui/core";
+import React, { useEffect } from "react";
+import { useRecoilValue } from "recoil";
+import { loaderAtom } from "../../recoil/atoms/loadingAtom";
+import ShowSnackbar from "./ShowSnackbar";
 
 interface LayoutProps {
   children: React.ReactNode;
@@ -16,6 +17,8 @@ const Layout: React.FC<LayoutProps> = ({ children, title }) => {
       jssStyles.parentElement.removeChild(jssStyles);
     }
   }, []);
+
+  const loading = useRecoilValue(loaderAtom);
   return (
     <>
       <Head>
@@ -27,7 +30,14 @@ const Layout: React.FC<LayoutProps> = ({ children, title }) => {
       </Head>
       <CssBaseline />
       <main>
-        <RecoilRoot>{children}</RecoilRoot>
+        {children}
+        <ShowSnackbar />
+        {loading && (
+          <LinearProgress
+            style={{ position: "fixed", top: 0, width: "100%", left: 0 }}
+            color="secondary"
+          />
+        )}
       </main>
     </>
   );

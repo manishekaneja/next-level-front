@@ -1,5 +1,9 @@
+import { createMuiTheme, ThemeProvider } from "@material-ui/core";
+import { useRouter } from "next/router";
+import { useEffect } from "react";
+import { RecoilRoot, useSetRecoilState } from "recoil";
+import { loaderAtom } from "../recoil/atoms/loadingAtom";
 import "../styles/globals.css";
-import { ThemeProvider, createMuiTheme } from "@material-ui/core";
 
 const theme = createMuiTheme({
   typography: {
@@ -20,12 +24,37 @@ const theme = createMuiTheme({
   },
 });
 
-function MyApp({ Component, pageProps }) {
-  return (
-    <ThemeProvider theme={theme}>
-      <Component {...pageProps} />
-    </ThemeProvider>
-  );
+function usePageTransitionLoader() {
+  const setLoader = useSetRecoilState(loaderAtom);
+  const router = useRouter();
+  useEffect(() => {
+    const handleRouteChange = () => {
+      setLoader(true);
+    };
+    const handleRouteComplete = () => {
+      setLoader(false);
+    };
+    router.events.on("routeChangeStart", handleRouteChange);
+    router.events.on("routeChangeComplete", handleRouteComplete);
+    return () => {
+      router.events.off("routeChangeStart", handleRouteChange);
+      router.events.off("routeChangeComplete", handleRouteComplete);
+    };
+  }, []);
+  return null;
 }
 
-export default MyApp;
+function MyApp({ Component, pageProps }) {
+  usePageTransitionLoader();
+  return <Component {...pageProps} />;
+}
+
+const EntryPoint = (props) => (
+  <ThemeProvider theme={theme}>
+    <RecoilRoot>
+      <MyApp {...props} />
+    </RecoilRoot>
+  </ThemeProvider>
+);
+
+export default EntryPoint;

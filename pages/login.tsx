@@ -1,26 +1,79 @@
-import React from "react";
-import { withUrqlClient } from "next-urql";
 import {
-  Container,
   Box,
+  Button,
+  Container,
+  Divider,
   Paper,
   Typography,
-  Divider,
-  Button,
-  Link,
 } from "@material-ui/core";
+import { withUrqlClient } from "next-urql";
+import Link from "next/link";
+import React, { useCallback, useEffect } from "react";
+import { useSetRecoilState } from "recoil";
+import validator from "validator";
 import BackWallpaper from "../components/common/BackWallpaper";
-import Layout from "../components/common/Layout";
-import { createUrqlClient } from "../utils/createUrqlClient";
-
-import styles from "../styles/Login.module.css";
 import CustomForm from "../components/common/CustomForm";
-import useGoto from "../utils/customHook/useGoto";
+import Layout from "../components/common/Layout";
+import { useLoginMutation } from "../graphql-tsx-gen/graphql";
+import { loaderAtom } from "../recoil/atoms/loadingAtom";
+import { snackbarAtom } from "../recoil/atoms/snackbarAtom";
+import styles from "../styles/account.module.css";
 import RoutesEndpoints from "../utils/constants/routes";
+import { createUrqlClient } from "../utils/createUrqlClient";
+import useGoto from "../utils/customHook/useGoto";
+
+function useLoginActionHook() {
+  const [{ fetching }, loginAction] = useLoginMutation();
+  const setSnackbarObject = useSetRecoilState(snackbarAtom);
+  const setLoader = useSetRecoilState(loaderAtom);
+  useEffect(() => {
+    setLoader(fetching);
+  }, [fetching]);
+
+  const onSubmit = useCallback((value: any) => {
+    loginAction({
+      username: value.find((input: any) => input.name === "username").value,
+      password: value.find((input: any) => input.name === "password").value,
+    })
+      .then(
+        ({
+          data: {
+            login: { errors, user },
+          },
+          error,
+        }) => {
+          if (error) {
+            setSnackbarObject({
+              open: true,
+              message: error.message,
+            });
+            return;
+          }
+          if (errors && errors.length > 0) {
+            setSnackbarObject({
+              open: true,
+              message: errors[0].message,
+            });
+            return;
+          }
+        }
+      )
+      .catch((error) => {
+        setSnackbarObject({
+          open: true,
+          message: error.message,
+        });
+      });
+  }, []);
+
+  return { onSubmit };
+}
 
 interface LoginProps {}
 const Login: React.FC<LoginProps> = () => {
   const goto = useGoto();
+  const { onSubmit } = useLoginActionHook();
+
   return (
     <Layout title="Lireddit | Login">
       <Container maxWidth="sm">
@@ -62,17 +115,26 @@ const Login: React.FC<LoginProps> = () => {
                     label: "USERNAME/E-MAIL",
                     name: "username",
                     placeholder: "identify_you_as.",
+                    validator: (value: string) =>
+                      !!value && validator.isEmail(value)
+                        ? ""
+                        : "Please enter a Valid Email Id",
                     type: "text",
                   },
                   {
                     label: "PASSWORD",
                     name: "password",
                     placeholder: "your_private_key",
+                    validator: (value: string) =>
+                      !!value && value.length > 8
+                        ? ""
+                        : "A Valid Password should have minimum 8 characters.",
                     type: "password",
                   },
                 ]}
+                disableIfInvalid={false}
                 submit={<Typography variant="overline">Login</Typography>}
-                onSubmit={(value: any) => goto(RoutesEndpoints.NEWS_FEED)}
+                onSubmit={onSubmit}
                 footer={
                   <>
                     <Button
@@ -86,7 +148,11 @@ const Login: React.FC<LoginProps> = () => {
                       </Typography>
                     </Button>
                     <Link href="/register">
-                      <Typography variant="overline">
+                      <Typography
+                        color="primary"
+                        style={{ cursor: "pointer" }}
+                        variant="overline"
+                      >
                         First Time User??
                       </Typography>
                     </Link>
