@@ -1,7 +1,9 @@
 import { Cache, cacheExchange, QueryInput } from "@urql/exchange-graphcache";
 import { dedupExchange, fetchExchange } from "urql";
+import { v4 as uuidv4 } from "uuid";
 import {
   LoginMutation,
+  LogoutMutation,
   MeDocument,
   MeQuery,
   RegisterMutation,
@@ -24,6 +26,10 @@ export const createUrqlClient = (ssrExchange: any) => ({
   exchanges: [
     dedupExchange,
     cacheExchange({
+      keys: {
+        UserResponse: () => uuidv4(),
+        FieldError: () => uuidv4(),
+      },
       updates: {
         Mutation: {
           login: (_result, _, cache, __) => {
@@ -54,6 +60,25 @@ export const createUrqlClient = (ssrExchange: any) => ({
                   return {
                     me: result.register,
                   };
+                }
+              }
+            );
+          },
+          logout: (_result, _, cache, __) => {
+            betterUpdateQuery<LogoutMutation, MeQuery>(
+              cache,
+              { query: MeDocument },
+              _result,
+              (result: LogoutMutation, query: MeQuery): MeQuery => {
+                console.log(">>", result);
+                if (result.logout) {
+                  return {
+                    me: {
+                      user: null,
+                    },
+                  };
+                } else {
+                  return query;
                 }
               }
             );

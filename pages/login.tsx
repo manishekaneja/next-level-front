@@ -8,6 +8,7 @@ import {
 } from "@material-ui/core";
 import { withUrqlClient } from "next-urql";
 import Link from "next/link";
+import { useRouter } from "next/router";
 import React, { useCallback, useEffect } from "react";
 import { useSetRecoilState } from "recoil";
 import validator from "validator";
@@ -25,6 +26,7 @@ import useGoto from "../utils/customHook/useGoto";
 function useLoginActionHook() {
   const [{ fetching }, loginAction] = useLoginMutation();
   const setSnackbarObject = useSetRecoilState(snackbarAtom);
+  const router = useRouter();
   const setLoader = useSetRecoilState(loaderAtom);
   useEffect(() => {
     setLoader(fetching);
@@ -43,6 +45,7 @@ function useLoginActionHook() {
           error,
         }) => {
           if (error) {
+            console.log(error)
             setSnackbarObject({
               open: true,
               message: error.message,
@@ -50,15 +53,20 @@ function useLoginActionHook() {
             return;
           }
           if (errors && errors.length > 0) {
+            console.log(errors)
+
             setSnackbarObject({
               open: true,
               message: errors[0].message,
             });
             return;
           }
+          router.push(RoutesEndpoints.NEWS_FEED);
         }
       )
       .catch((error) => {
+        console.log(error)
+
         setSnackbarObject({
           open: true,
           message: error.message,

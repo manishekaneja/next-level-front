@@ -4,7 +4,7 @@ import {
   Container,
   Divider,
   Paper,
-  Typography,
+  Typography
 } from "@material-ui/core";
 import { withUrqlClient } from "next-urql";
 import { useRouter } from "next/router";
@@ -45,6 +45,7 @@ function useRegisterActionHook() {
           error,
         }) => {
           if (error) {
+            console.log(error);
             setSnackbarObject({
               open: true,
               message: error.message,
@@ -52,6 +53,7 @@ function useRegisterActionHook() {
             return;
           }
           if (errors && errors.length > 0) {
+            console.log(errors);
             setSnackbarObject({
               open: true,
               message: errors[0].message,
@@ -62,6 +64,7 @@ function useRegisterActionHook() {
         }
       )
       .catch((error) => {
+        console.log(error);
         setSnackbarObject({
           open: true,
           message: error.message,

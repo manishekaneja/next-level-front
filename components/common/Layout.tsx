@@ -2,10 +2,11 @@ import { CssBaseline, LinearProgress } from "@material-ui/core";
 import Head from "next/head";
 import { useRouter } from "next/router";
 import React, { useEffect } from "react";
-import { useRecoilState, useRecoilValue } from "recoil";
+import { useRecoilValue, useSetRecoilState } from "recoil";
+import { useMeQuery } from "../../graphql-tsx-gen/graphql";
 import { loaderAtom } from "../../recoil/atoms/loadingAtom";
+import { snackbarAtom } from "../../recoil/atoms/snackbarAtom";
 import { userAtom } from "../../recoil/atoms/userAtom";
-import { isBrowser } from "../../utils/constants/basic";
 import RoutesEndpoints from "../../utils/constants/routes";
 import ShowSnackbar from "./ShowSnackbar";
 
@@ -24,8 +25,36 @@ const Layout: React.FC<LayoutProps> = ({ children, title, screenType }) => {
   }, []);
 
   const router = useRouter();
+  const setLoader = useSetRecoilState(loaderAtom);
+  const setSnackbar = useSetRecoilState(snackbarAtom);
+  const setUser = useSetRecoilState(userAtom);
+
+  const [{ fetching, data }] = useMeQuery();
+  useEffect(() => {
+    setLoader(fetching);
+    console.log({ fetching, data });
+    if (!fetching) {
+      if ((!data || !data.me || data.me.errors) && !data.me.user) {
+        if (screenType === "for_verified_user") {
+          setSnackbar({
+            open: true,
+            message: data?.me.errors[0].message,
+          });
+          router.push(RoutesEndpoints.LOGIN);
+        }
+      } else {
+        if (screenType === "for_unverified_user") {
+          if (data.me.user !== null) {
+            router.replace(RoutesEndpoints.NEWS_FEED);
+            setUser(data.me.user);
+          }
+        }
+      }
+    }
+  }, [fetching, data]);
+
   const loading = useRecoilValue(loaderAtom);
-  const user = useRecoilState(userAtom);
+  // const user = useRecoilState(userAtom);
   // if (isBrowser) {
   //   if (screenType === "for_verified_user") {
   //     if (user === null) {
