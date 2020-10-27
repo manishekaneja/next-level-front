@@ -1,13 +1,9 @@
 import { CssBaseline, LinearProgress } from "@material-ui/core";
 import Head from "next/head";
-import { useRouter } from "next/router";
 import React, { useEffect } from "react";
-import { useRecoilValue, useSetRecoilState } from "recoil";
 import { useMeQuery } from "../../graphql-tsx-gen/graphql";
-import { loaderAtom } from "../../recoil/atoms/loadingAtom";
-import { snackbarAtom } from "../../recoil/atoms/snackbarAtom";
-import { userAtom } from "../../recoil/atoms/userAtom";
 import RoutesEndpoints from "../../utils/constants/routes";
+import useCommonApplicationHooks from "../../utils/customHook/useCommonApplicationHooks";
 import ShowSnackbar from "./ShowSnackbar";
 
 interface LayoutProps {
@@ -24,15 +20,18 @@ const Layout: React.FC<LayoutProps> = ({ children, title, screenType }) => {
     }
   }, []);
 
-  const router = useRouter();
-  const setLoader = useSetRecoilState(loaderAtom);
-  const setSnackbar = useSetRecoilState(snackbarAtom);
-  const setUser = useSetRecoilState(userAtom);
+  const {
+    router,
+    setLoader,
+    setSnackbar,
+    setUser,
+    loading,
+  } = useCommonApplicationHooks();
 
   const [{ fetching, data }] = useMeQuery();
+
   useEffect(() => {
     setLoader(fetching);
-    console.log({ fetching, data });
     if (!fetching) {
       if ((!data || !data.me || data.me.errors) && !data.me.user) {
         if (screenType === "for_verified_user") {
@@ -53,20 +52,6 @@ const Layout: React.FC<LayoutProps> = ({ children, title, screenType }) => {
     }
   }, [fetching, data]);
 
-  const loading = useRecoilValue(loaderAtom);
-  // const user = useRecoilState(userAtom);
-  // if (isBrowser) {
-  //   if (screenType === "for_verified_user") {
-  //     if (user === null) {
-  //       router.replace(RoutesEndpoints.LOGIN);
-  //     }
-  //   }
-  //   if (screenType === "for_unverified_user") {
-  //     if (user !== null) {
-  //       router.replace(RoutesEndpoints.NEWS_FEED);
-  //     }
-  //   }
-  // }
   return (
     <>
       <Head>

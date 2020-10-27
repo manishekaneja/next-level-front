@@ -4,6 +4,7 @@ import { useEffect } from "react";
 import { RecoilRoot, useSetRecoilState } from "recoil";
 import { loaderAtom } from "../recoil/atoms/loadingAtom";
 import "../styles/globals.css";
+import useCommonApplicationHooks from "../utils/customHook/useCommonApplicationHooks";
 
 const theme = createMuiTheme({
   typography: {
@@ -25,8 +26,7 @@ const theme = createMuiTheme({
 });
 
 function usePageTransitionLoader() {
-  const setLoader = useSetRecoilState(loaderAtom);
-  const router = useRouter();
+  const { setLoader, router } = useCommonApplicationHooks();
   useEffect(() => {
     const handleRouteChange = () => {
       setLoader(true);
