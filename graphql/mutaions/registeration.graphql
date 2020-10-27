@@ -12,11 +12,6 @@ mutation Register(
       last_name: $last_name
     }
   ) {
-    user {
-      ...RegularUser
-    }
-    errors {
-      ...RegularError
-    }
+    ...RegularUserResponse
   }
 }

@@ -15,13 +15,12 @@ const ShowSnackbar: React.FC<ShowSnackbar> = ({}) => {
   }, []);
   const snackbarObject = useRecoilValue(snackbarAtom);
   const resetSnackbarObject = useResetRecoilState(snackbarAtom);
-  const handleClose = (event, reason) => {
+  const handleClose = (_: any, reason) => {
     if (reason === "clickaway") {
       return;
     }
     resetSnackbarObject();
   };
-  console.log(snackbarObject);
   return (
     <Snackbar
       anchorOrigin={{
