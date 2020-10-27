@@ -4,32 +4,27 @@ import {
   Container,
   Divider,
   Paper,
-  Typography
+  Typography,
 } from "@material-ui/core";
 import { withUrqlClient } from "next-urql";
-import { useRouter } from "next/router";
 import React, { useCallback, useEffect } from "react";
-import { useSetRecoilState } from "recoil";
 import validator from "validator";
 import BackWallpaper from "../components/common/BackWallpaper";
 import CustomForm from "../components/common/CustomForm";
 import Layout from "../components/common/Layout";
 import { useRegisterMutation } from "../graphql-tsx-gen/graphql";
-import { loaderAtom } from "../recoil/atoms/loadingAtom";
-import { snackbarAtom } from "../recoil/atoms/snackbarAtom";
 import styles from "../styles/account.module.css";
 import RoutesEndpoints from "../utils/constants/routes";
 import { createUrqlClient } from "../utils/createUrqlClient";
+import useCommonApplicationHooks from "../utils/customHook/useCommonApplicationHooks";
 import useGoto from "../utils/customHook/useGoto";
 
 function useRegisterActionHook() {
   const [{ fetching }, registerAction] = useRegisterMutation();
-  const setLoader = useSetRecoilState(loaderAtom);
+  const { setLoader, setSnackbar, router } = useCommonApplicationHooks();
   useEffect(() => {
     setLoader(fetching);
   }, [fetching]);
-  const router = useRouter();
-  const setSnackbarObject = useSetRecoilState(snackbarAtom);
   const onSubmit = useCallback((value: any) => {
     registerAction({
       username: value.find((input: any) => input.name === "email").value,
@@ -46,7 +41,7 @@ function useRegisterActionHook() {
         }) => {
           if (error) {
             console.log(error);
-            setSnackbarObject({
+            setSnackbar({
               open: true,
               message: error.message,
             });
@@ -54,7 +49,7 @@ function useRegisterActionHook() {
           }
           if (errors && errors.length > 0) {
             console.log(errors);
-            setSnackbarObject({
+            setSnackbar({
               open: true,
               message: errors[0].message,
             });
@@ -65,7 +60,7 @@ function useRegisterActionHook() {
       )
       .catch((error) => {
         console.log(error);
-        setSnackbarObject({
+        setSnackbar({
           open: true,
           message: error.message,
         });
