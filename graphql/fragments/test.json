@@ -1,0 +1,14 @@
+{
+    "id":1,
+    "countryName":"India",
+    "states":[{
+        "stateId":"S1",
+        "stateName":"Delhi",
+        "cities":{
+            "cityId":"c1",
+            "cityName":"New Delhi"
+        }
+        
+    }]
+    
+}
