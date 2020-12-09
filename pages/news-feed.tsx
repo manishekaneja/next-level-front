@@ -5,7 +5,7 @@ import BackWallpaper from "../components/common/BackWallpaper";
 import Header from "../components/common/Header";
 import Layout from "../components/common/Layout";
 import Post from "../components/Post/Post";
-import { useLogoutMutation } from "../graphql-tsx-gen/graphql";
+import { useLogoutMutation, useMeQuery } from "../graphql-tsx-gen/graphql";
 // import { userAtom } from "../recoil/atoms/userAtom";
 import RoutesEndpoints from "../utils/constants/routes";
 import { createUrqlClient } from "../utils/createUrqlClient";
@@ -15,11 +15,12 @@ interface LoginProps {}
 const Login: React.FC<LoginProps> = () => {
   const [{ fetching: logoutFetching, data: logoutData }] = useLogoutMutation();
   const { setLoader, user, router } = useCommonApplicationHooks();
+
   useEffect(() => {
     setLoader(logoutFetching);
   }, [logoutFetching]);
   useEffect(() => {
-    if (logoutData?.logout) {
+    if (logoutData) {
       router.push(RoutesEndpoints.LOGIN);
     }
   }, [logoutData]);

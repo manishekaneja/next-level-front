@@ -1,6 +1,6 @@
-import { CssBaseline, LinearProgress } from "@material-ui/core";
+import { Button, CssBaseline, LinearProgress } from "@material-ui/core";
 import Head from "next/head";
-import React, { useEffect } from "react";
+import React, { Fragment, useEffect } from "react";
 import { useMeQuery } from "../../graphql-tsx-gen/graphql";
 import RoutesEndpoints from "../../utils/constants/routes";
 import useCommonApplicationHooks from "../../utils/customHook/useCommonApplicationHooks";
@@ -28,16 +28,16 @@ const Layout: React.FC<LayoutProps> = ({ children, title, screenType }) => {
     loading,
   } = useCommonApplicationHooks();
 
-  const [{ fetching, data }] = useMeQuery();
+  const [{ fetching, data, error }, call] = useMeQuery();
 
   useEffect(() => {
     setLoader(fetching);
-    if (!fetching) {
+    if (!fetching && !error) {
       if ((!data || !data.me || data.me.errors) && !data.me.user) {
         if (screenType === "for_verified_user") {
           setSnackbar({
             open: true,
-            message: data?.me.errors[0].message,
+            message: "Error Found",
           });
           router.push(RoutesEndpoints.LOGIN);
         }
@@ -51,6 +51,22 @@ const Layout: React.FC<LayoutProps> = ({ children, title, screenType }) => {
       }
     }
   }, [fetching, data]);
+
+  if (error) {
+    return (
+      <Fragment>
+        <Button
+          onClick={() => {
+            call();
+          }}
+        >
+          {" "}
+          make A Call
+        </Button>
+        <pre>{JSON.stringify(error, null, 2)}</pre>
+      </Fragment>
+    );
+  }
 
   return (
     <>

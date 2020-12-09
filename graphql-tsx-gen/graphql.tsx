@@ -14,6 +14,9 @@ export type Scalars = {
 
 export type Query = {
   __typename?: 'Query';
+  getAllGroups: Array<Group>;
+  allUsers: Array<User>;
+  getAllTransactions: Array<Transaction>;
   posts: Array<Post>;
   post?: Maybe<Post>;
   me?: Maybe<UserResponse>;
@@ -22,6 +25,41 @@ export type Query = {
 
 export type QueryPostArgs = {
   id: Scalars['Int'];
+};
+
+export type Group = {
+  __typename?: 'Group';
+  id: Scalars['Float'];
+  createdAt: Scalars['String'];
+  updatedAt: Scalars['String'];
+  name: Scalars['String'];
+  created_by: User;
+  transactions_made: Array<Transaction>;
+  members: Array<User>;
+};
+
+export type User = {
+  __typename?: 'User';
+  id: Scalars['Float'];
+  createdAt: Scalars['String'];
+  updatedAt: Scalars['String'];
+  first_name: Scalars['String'];
+  last_name: Scalars['String'];
+  username: Scalars['String'];
+  email: Scalars['String'];
+  owned_groups: Array<Group>;
+  groups: Array<Group>;
+  transactions_made: Array<Transaction>;
+};
+
+export type Transaction = {
+  __typename?: 'Transaction';
+  id: Scalars['Float'];
+  created_at: Scalars['String'];
+  message: Scalars['String'];
+  amount: Scalars['Float'];
+  done_by: User;
+  belong_to: Group;
 };
 
 export type Post = {
@@ -44,24 +82,30 @@ export type FieldError = {
   message: Scalars['String'];
 };
 
-export type User = {
-  __typename?: 'User';
-  id: Scalars['Float'];
-  createdAt: Scalars['String'];
-  updatedAt: Scalars['String'];
-  first_name: Scalars['String'];
-  last_name: Scalars['String'];
-  username: Scalars['String'];
-};
-
 export type Mutation = {
   __typename?: 'Mutation';
+  genrateDataForUse: Scalars['Boolean'];
+  clean: Scalars['Boolean'];
+  createNewGroup: Scalars['Boolean'];
+  addNewMember: Scalars['Boolean'];
   createPost: Post;
   updatePost?: Maybe<Post>;
   deletePost?: Maybe<Scalars['Boolean']>;
+  addNewTransaction: Scalars['Boolean'];
   register: UserResponse;
   login?: Maybe<UserResponse>;
   logout: Scalars['Boolean'];
+};
+
+
+export type MutationCreateNewGroupArgs = {
+  group_name: Scalars['String'];
+};
+
+
+export type MutationAddNewMemberArgs = {
+  groupid: Scalars['Float'];
+  userid: Scalars['Float'];
 };
 
 
@@ -78,6 +122,14 @@ export type MutationUpdatePostArgs = {
 
 export type MutationDeletePostArgs = {
   id: Scalars['Float'];
+};
+
+
+export type MutationAddNewTransactionArgs = {
+  groupid: Scalars['Float'];
+  userid: Scalars['Float'];
+  amount: Scalars['Float'];
+  message: Scalars['String'];
 };
 
 
@@ -98,18 +150,23 @@ export type MutationLogoutArgs = {
 export type UsernamePasswordInput = {
   username: Scalars['String'];
   password: Scalars['String'];
+  email?: Maybe<Scalars['String']>;
   first_name?: Maybe<Scalars['String']>;
   last_name?: Maybe<Scalars['String']>;
 };
 
 export type RegularErrorFragment = (
   { __typename?: 'FieldError' }
-  & Pick<FieldError, 'message' | 'field'>
+  & Pick<FieldError, '[object Object]' | '[object Object]'>
 );
 
 export type RegularUserFragment = (
   { __typename?: 'User' }
-  & Pick<User, 'id' | 'first_name' | 'last_name' | 'username'>
+  & Pick<User, '[object Object]' | '[object Object]' | '[object Object]' | '[object Object]' | '[object Object]'>
+  & { groups: Array<(
+    { __typename?: 'Group' }
+    & Pick<Group, '[object Object]'>
+  )> }
 );
 
 export type RegularUserResponseFragment = (
@@ -144,7 +201,7 @@ export type LogoutMutationVariables = Exact<{
 
 export type LogoutMutation = (
   { __typename?: 'Mutation' }
-  & Pick<Mutation, 'logout'>
+  & Pick<Mutation, '[object Object]'>
 );
 
 export type RegisterMutationVariables = Exact<{
@@ -152,6 +209,7 @@ export type RegisterMutationVariables = Exact<{
   password: Scalars['String'];
   first_name: Scalars['String'];
   last_name: Scalars['String'];
+  email: Scalars['String'];
 }>;
 
 
@@ -185,7 +243,11 @@ export const RegularUserFragmentDoc = gql`
   id
   first_name
   last_name
+  email
   username
+  groups {
+    name
+  }
 }
     `;
 export const RegularUserResponseFragmentDoc = gql`
@@ -220,8 +282,10 @@ export function useLogoutMutation() {
   return Urql.useMutation<LogoutMutation, LogoutMutationVariables>(LogoutDocument);
 };
 export const RegisterDocument = gql`
-    mutation Register($username: String!, $password: String!, $first_name: String!, $last_name: String!) {
-  register(options: {username: $username, password: $password, first_name: $first_name, last_name: $last_name}) {
+    mutation Register($username: String!, $password: String!, $first_name: String!, $last_name: String!, $email: String!) {
+  register(
+    options: {username: $username, password: $password, email: $email, first_name: $first_name, last_name: $last_name}
+  ) {
     ...RegularUserResponse
   }
 }

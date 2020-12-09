@@ -4,12 +4,11 @@ import {
   Container,
   Divider,
   Paper,
-  Typography,
+  Typography
 } from "@material-ui/core";
 import { withUrqlClient } from "next-urql";
 import Link from "next/link";
 import React, { useCallback, useEffect } from "react";
-import validator from "validator";
 import BackWallpaper from "../components/common/BackWallpaper";
 import CustomForm from "../components/common/CustomForm";
 import Layout from "../components/common/Layout";
@@ -53,7 +52,7 @@ function useLoginActionHook() {
 
             setSnackbar({
               open: true,
-              message: errors[0].message,
+              message: "OK",
             });
             return;
           }
@@ -120,9 +119,7 @@ const Login: React.FC<LoginProps> = () => {
                     name: "username",
                     placeholder: "identify_you_as.",
                     validator: (value: string) =>
-                      !!value && validator.isEmail(value)
-                        ? ""
-                        : "Please enter a Valid Email Id",
+                      !!value ? "" : "Please enter a Valid Email Id",
                     type: "text",
                   },
                   {

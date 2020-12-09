@@ -4,6 +4,7 @@ interface UserAtomType {
   first_name: string;
   last_name: string;
   username: string;
+  groups: Array<{ group_name: string }>;
 }
 
 const userAtom: RecoilState<UserAtomType | null> = atom({
