@@ -1,15 +1,20 @@
 import { AppBar, Button, Toolbar, Typography } from "@material-ui/core";
 import Link from "next/link";
-import React from "react";
+import React, { useEffect } from "react";
 import { useLogoutMutation } from "../../../graphql-tsx-gen/graphql";
-import { UserAtomType } from "../../../recoil/atoms/userAtom";
+import useCommonApplicationHooks from "../../../utils/customHook/useCommonApplicationHooks";
 
-interface HeaderProps {
-  user: UserAtomType;
-}
-const Header: React.FC<HeaderProps> = ({ user }) => {
-  const [, logoutAction] = useLogoutMutation();
+const Header: React.FC<{}> = () => {
+  const [
+    { fetching: logoutFetching, data: logoutResponse },
+    logoutAction,
+  ] = useLogoutMutation();
+  const { setLoaderState, rootUser } = useCommonApplicationHooks();
 
+  useEffect(() => {
+    setLoaderState(logoutFetching);
+    console.log(logoutResponse);
+  }, [logoutFetching, logoutResponse]);
   return (
     <>
       <AppBar variant="elevation" position="fixed">
@@ -18,9 +23,9 @@ const Header: React.FC<HeaderProps> = ({ user }) => {
             <Typography variant="h6"> News feed</Typography>
           </Link>
           <div style={{ flex: 1 }} />
-          {user ? (
+          {rootUser ? (
             <>
-              <Typography variant="body1"> {user.username}</Typography>
+              <Typography variant="body1"> {rootUser.username}</Typography>
               <Button
                 color="inherit"
                 onClick={() => logoutAction({ removeAll: false })}
@@ -33,7 +38,7 @@ const Header: React.FC<HeaderProps> = ({ user }) => {
           ) : null}
         </Toolbar>
       </AppBar>
-      <Toolbar />
+      <Toolbar style={{ minWidth: 64, maxWidth: 64 }} />
     </>
   );
 };

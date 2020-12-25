@@ -4,12 +4,11 @@ import {
   Container,
   Divider,
   Paper,
-  Typography,
+  Typography
 } from "@material-ui/core";
 import { withUrqlClient } from "next-urql";
 import React, { useCallback, useEffect } from "react";
 import validator from "validator";
-import BackWallpaper from "../components/common/BackWallpaper";
 import CustomForm from "../components/common/CustomForm";
 import Layout from "../components/common/Layout";
 import { useRegisterMutation } from "../graphql-tsx-gen/graphql";
@@ -21,16 +20,21 @@ import useGoto from "../utils/customHook/useGoto";
 
 function useRegisterActionHook() {
   const [{ fetching }, registerAction] = useRegisterMutation();
-  const { setLoader, setSnackbar, router } = useCommonApplicationHooks();
+  const { setLoaderState, setSnackbar, router } = useCommonApplicationHooks();
   useEffect(() => {
-    setLoader(fetching);
+    setLoaderState(fetching);
   }, [fetching]);
   const onSubmit = useCallback((value: any) => {
     registerAction({
-      username: value.find((input: any) => input.name === "email").value,
-      password: value.find((input: any) => input.name === "password").value,
-      first_name: value.find((input: any) => input.name === "first_name").value,
-      last_name: value.find((input: any) => input.name === "last_name").value,
+      username: value.find((input: any) => input.name === "username")
+        .value as string,
+      password: value.find((input: any) => input.name === "password")
+        .value as string,
+      first_name: value.find((input: any) => input.name === "first_name")
+        .value as string,
+      last_name: value.find((input: any) => input.name === "last_name")
+        .value as string,
+      email: value.find((input: any) => input.name === "email").value as string,
     })
       .then(
         ({
@@ -75,9 +79,13 @@ const Regsiter: React.FC<RegisterProps> = () => {
   const goto = useGoto();
   const { onSubmit } = useRegisterActionHook();
   return (
-    <Layout title="Lireddit | Register" screenType="for_unverified_user">
+    <Layout
+      title="Lireddit | Register"
+      screenType="for_unverified_user"
+      showHeader={false}
+      backgroundOpacity={1}
+    >
       <Container maxWidth="sm">
-        <BackWallpaper />
         <Box
           className={styles.container}
           display="flex"
@@ -126,7 +134,18 @@ const Regsiter: React.FC<RegisterProps> = () => {
                     },
                   },
                   {
-                    label: "USERNAME/E-MAIL",
+                    label: "USERNAME",
+                    name: "username",
+                    placeholder: "your_unique_username",
+                    type: "text",
+                    validator: (value: string) => {
+                      return !!value && value.length > 6
+                        ? ""
+                        : "Please enter atleast 6 characters for your username";
+                    },
+                  },
+                  {
+                    label: "E-MAIL",
                     name: "email",
                     placeholder: "email_to_contact_you",
                     type: "email",
@@ -136,6 +155,7 @@ const Regsiter: React.FC<RegisterProps> = () => {
                         : "Please enter a Valid Email Id";
                     },
                   },
+
                   {
                     label: "PASSWORD",
                     name: "password",

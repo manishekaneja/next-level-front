@@ -1,8 +1,7 @@
 import { IconButton, Snackbar } from "@material-ui/core";
 import CloseIcon from "@material-ui/icons/Close";
 import React, { useEffect } from "react";
-import { useResetRecoilState } from "recoil";
-import { snackbarAtom } from "../../../recoil/atoms/snackbarAtom";
+import { useSnackbarResetter } from "../../../redux/BasicInfo/actions";
 import useCommonApplicationHooks from "../../../utils/customHook/useCommonApplicationHooks";
 
 interface ShowSnackbar {}
@@ -15,12 +14,12 @@ const ShowSnackbar: React.FC<ShowSnackbar> = ({}) => {
     }
   }, []);
   const { snackbar } = useCommonApplicationHooks();
-  const resetSnackbarObject = useResetRecoilState(snackbarAtom);
-  const handleClose = (_: any, reason) => {
+  const resetSnackbar = useSnackbarResetter();
+  const handleClose = (_: any, reason: string | null | undefined) => {
     if (reason === "clickaway") {
       return;
     }
-    resetSnackbarObject();
+    resetSnackbar(undefined);
   };
   return (
     <Snackbar

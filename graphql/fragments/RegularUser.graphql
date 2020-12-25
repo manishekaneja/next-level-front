@@ -1,10 +1,10 @@
-fragment RegularUser on User {
+fragment RegularUser on ApplicationUser {
   id
-  first_name
-  last_name
-  email
+  firstname
+  lastname
   username
-  groups{
+  email
+  groupList {
     name
   }
 }

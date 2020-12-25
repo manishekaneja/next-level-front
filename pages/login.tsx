@@ -4,12 +4,11 @@ import {
   Container,
   Divider,
   Paper,
-  Typography
+  Typography,
 } from "@material-ui/core";
 import { withUrqlClient } from "next-urql";
 import Link from "next/link";
 import React, { useCallback, useEffect } from "react";
-import BackWallpaper from "../components/common/BackWallpaper";
 import CustomForm from "../components/common/CustomForm";
 import Layout from "../components/common/Layout";
 import { useLoginMutation } from "../graphql-tsx-gen/graphql";
@@ -20,11 +19,11 @@ import useCommonApplicationHooks from "../utils/customHook/useCommonApplicationH
 import useGoto from "../utils/customHook/useGoto";
 
 function useLoginActionHook() {
-  const { setLoader, router, setSnackbar } = useCommonApplicationHooks();
+  const { setLoaderState, router, setSnackbar } = useCommonApplicationHooks();
 
   const [{ fetching }, loginAction] = useLoginMutation();
   useEffect(() => {
-    setLoader(fetching);
+    setLoaderState(fetching);
   }, [fetching]);
 
   const onSubmit = useCallback((value: any) => {
@@ -78,9 +77,13 @@ const Login: React.FC<LoginProps> = () => {
   const { onSubmit } = useLoginActionHook();
 
   return (
-    <Layout title="Lireddit | Login" screenType="for_unverified_user">
+    <Layout
+      title="Lireddit | Login"
+      screenType="for_unverified_user"
+      showHeader={false}
+      backgroundOpacity={1}
+    >
       <Container maxWidth="sm">
-        <BackWallpaper />
         <Box
           className={styles.container}
           display="flex"

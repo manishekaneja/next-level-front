@@ -1,7 +1,6 @@
 import { Button } from "@material-ui/core";
 import React, { ChangeEvent, ReactNode, useCallback, useState } from "react";
-import { useSetRecoilState } from "recoil";
-import { snackbarAtom } from "../../../recoil/atoms/snackbarAtom";
+import { useSnackbarSetter } from "../../../redux/BasicInfo/actions";
 import CommonInput from "../CommonInput";
 
 type FieldObject = {
@@ -112,7 +111,7 @@ const CustomForm: React.FC<CustomFormProps> = ({
     },
     [updateArray]
   );
-  const setSnackbarObject = useSetRecoilState(snackbarAtom);
+  const setSnackbar = useSnackbarSetter();
   const _onSubmit = async (event: ChangeEvent<HTMLFormElement>) => {
     event.preventDefault();
     if (inputArray.every((input) => input.isTouched && input.isValid)) {
@@ -125,8 +124,7 @@ const CustomForm: React.FC<CustomFormProps> = ({
           validateField(input.name);
         }
       });
-      setSnackbarObject({
-        open: true,
+      setSnackbar({
         message: "Please fill all values properly before Submitting.",
       });
     }

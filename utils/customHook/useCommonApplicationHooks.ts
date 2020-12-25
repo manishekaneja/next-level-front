@@ -1,27 +1,29 @@
 import { useRouter } from "next/router";
-import { useRecoilState } from "recoil";
-import { loaderAtom } from "../../recoil/atoms/loadingAtom";
+import { useSelector } from "react-redux";
 import {
-  snackbarAtom,
-  SnackbarAtomType,
-} from "../../recoil/atoms/snackbarAtom";
-import { userAtom, UserAtomType } from "../../recoil/atoms/userAtom";
+  useLoaderStateSetter,
+  useSnackbarResetter,
+  useSnackbarSetter,
+} from "../../redux/BasicInfo/actions";
 
 function useCommonApplicationHooks() {
   const router = useRouter();
-  const [snackbar, setSnackbar] = useRecoilState<SnackbarAtomType>(
-    snackbarAtom
-  );
-  const [loading, setLoader] = useRecoilState<boolean>(loaderAtom);
-  const [user, setUser] = useRecoilState<UserAtomType>(userAtom);
+  const {
+    basicInfo: { snackbarState, isLoading, isLoggedIn },
+    rootUser,
+  } = useSelector((state: RootState) => state);
+  const resetSnackbar = useSnackbarResetter();
+  const setSnackbar = useSnackbarSetter();
+  const setLoaderState = useLoaderStateSetter();
   return {
     router,
-    snackbar,
+    rootUser,
+    snackbar: snackbarState,
+    isLoading,
+    isLoggedIn,
+    resetSnackbar,
     setSnackbar,
-    loading,
-    setLoader,
-    user,
-    setUser,
+    setLoaderState,
   };
 }
 

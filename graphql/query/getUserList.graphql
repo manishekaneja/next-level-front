@@ -1,0 +1,11 @@
+query GetUserList($searchKey: String!) {
+  getUserList(searchKey: $searchKey) {
+    id
+    firstname
+    lastname
+    username
+  }
+}
+
+
+

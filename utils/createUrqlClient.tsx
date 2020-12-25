@@ -1,13 +1,8 @@
 import { Cache, cacheExchange, QueryInput } from "@urql/exchange-graphcache";
 import { dedupExchange, fetchExchange } from "urql";
 import { v4 as uuidv4 } from "uuid";
-import {
-  LoginMutation,
-  LogoutMutation,
-  MeDocument,
-  MeQuery,
-  RegisterMutation,
-} from "../graphql-tsx-gen/graphql";
+import { MeDocument } from "../graphql-tsx-gen/graphql";
+import isBrowser from "./isBrowser";
 
 function betterUpdateQuery<Result, Query>(
   cache: Cache,
@@ -19,7 +14,9 @@ function betterUpdateQuery<Result, Query>(
 }
 
 export const createUrqlClient = (ssrExchange: any) => ({
-  url: "http://localhost:8000/graphql",
+  url: isBrowser()
+    ? "http://localhost:8000/graphql"
+    : "http://backend:3000/graphql",
   fetchOptions: {
     credentials: "include" as const,
   },

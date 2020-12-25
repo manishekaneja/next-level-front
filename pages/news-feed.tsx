@@ -1,48 +1,108 @@
-import { Box, Container } from "@material-ui/core";
+import { Button, Divider, Paper, Toolbar, Typography } from "@material-ui/core";
+import _ from "lodash";
 import { withUrqlClient } from "next-urql";
-import React, { useEffect } from "react";
-import BackWallpaper from "../components/common/BackWallpaper";
-import Header from "../components/common/Header";
+import React, { Fragment } from "react";
 import Layout from "../components/common/Layout";
-import Post from "../components/Post/Post";
-import { useLogoutMutation, useMeQuery } from "../graphql-tsx-gen/graphql";
-// import { userAtom } from "../recoil/atoms/userAtom";
-import RoutesEndpoints from "../utils/constants/routes";
+import GroupListItem from "../components/GroupListItem/GroupListItem";
+import { useCreateGroupStateSetter } from "../redux/ModalState/actions";
 import { createUrqlClient } from "../utils/createUrqlClient";
 import useCommonApplicationHooks from "../utils/customHook/useCommonApplicationHooks";
 
-interface LoginProps {}
-const Login: React.FC<LoginProps> = () => {
-  const [{ fetching: logoutFetching, data: logoutData }] = useLogoutMutation();
-  const { setLoader, user, router } = useCommonApplicationHooks();
+const NewsFeed: React.FC<{}> = () => {
+  const {
+    rootUser: { groupList },
+  } = useCommonApplicationHooks();
+  const setCreateGroupState = useCreateGroupStateSetter();
 
-  useEffect(() => {
-    setLoader(logoutFetching);
-  }, [logoutFetching]);
-  useEffect(() => {
-    if (logoutData) {
-      router.push(RoutesEndpoints.LOGIN);
-    }
-  }, [logoutData]);
   return (
-    <Layout title="Lireddit | Newsfeed" screenType="for_verified_user">
-      <Container maxWidth="md">
-        <BackWallpaper opacity={0.3} />
-        <Header user={user} />
-        <Box
-          className="pt-10"
-          display="flex"
-          flexDirection="column"
-          justifyContent="center"
-          alignItems="stretch"
+    <Layout
+      title="Lireddit | Newsfeed"
+      screenType="for_verified_user"
+      backgroundOpacity={0.3}
+      showHeader
+    >
+      <Paper
+        elevation={4}
+        square
+        style={{
+          backgroundColor: "#eeeeee99",
+          overflow: "hidden",
+          maxHeight: "calc( 100vh - 64px )",
+          width: "100%",
+          display: "flex",
+          justifyContent: "flex-start",
+          alignItems: "stretch",
+        }}
+      >
+        <div style={{ overflow: "auto", height: "100%", width: 400 }}>
+          {_.map(
+            _.concat(groupList, [
+              { name: "ABC" } as Group,
+              { name: "ABC" } as Group,
+              { name: "ABC" } as Group,
+              { name: "ABC" } as Group,
+              { name: "ABC" } as Group,
+              { name: "ABC" } as Group,
+              { name: "ABC" } as Group,
+              { name: "FRE" } as Group,
+            ]),
+            (value: Group, idx) => (
+              <GroupListItem key={idx} groupDetails={value} />
+            )
+          )}
+          <Toolbar>
+            <Button
+              fullWidth
+              color="primary"
+              variant="contained"
+              onClick={() => setCreateGroupState(true)}
+            >
+              Create New Group
+            </Button>
+          </Toolbar>
+        </div>
+        <Divider orientation="vertical" />
+        <div
+          style={{
+            overflow: "auto",
+            height: "100%",
+            flex: 1,
+            position: "relative",
+          }}
         >
-          {[1, 2, 3, 4].map((_, idx) => (
-            <Post key={idx} />
-          ))}
-        </Box>
-      </Container>
+          <Toolbar
+            style={{
+              position: "sticky",
+              top: 0,
+            }}
+            component={Paper}
+            elevation={3}
+            square
+          >
+            <Typography align="center" variant="h5">
+              Group Title - Untitled
+            </Typography>
+          </Toolbar>
+          <Divider />
+          {_.map(
+            _.concat([] as Array<Split>, [
+              ({ onwer: "ASD", splitAmount: 100 } as unknown) as Split,
+            ]),
+            (value: Split, idx) => (
+              <Fragment key={idx}>
+                <Paper style={{ padding: 7 }} square elevation={0}>
+                  <Typography>
+                    {value.onwer} : {value.splitAmount}
+                  </Typography>
+                </Paper>
+                <Divider />
+              </Fragment>
+            )
+          )}
+        </div>
+      </Paper>
     </Layout>
   );
 };
 
-export default withUrqlClient(createUrqlClient, { ssr: false })(Login);
+export default withUrqlClient(createUrqlClient, { ssr: false })(NewsFeed);

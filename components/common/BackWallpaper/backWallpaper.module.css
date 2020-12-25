@@ -8,6 +8,9 @@
   left: 0px;
   z-index: 5;
 }
+.background img{
+  width:100%;
+}
 .canvas2 {
   translate: rotate(90deg);
 }

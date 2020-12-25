@@ -4,12 +4,11 @@ import {
   ButtonGroup,
   Container,
   Paper,
-  Typography,
+  Typography
 } from "@material-ui/core";
 import { withUrqlClient } from "next-urql";
 import Link from "next/link";
 import React from "react";
-import BackWallpaper from "../components/common/BackWallpaper/index";
 import Layout from "../components/common/Layout";
 import styles from "../styles/Base.module.css";
 import RoutesEndpoints from "../utils/constants/routes";
@@ -20,7 +19,12 @@ const Home: React.FC<{}> = ({}) => {
   const goto = useGoto();
   return (
     <>
-      <Layout title={"Lireddit | Home"} screenType="for_unverified_user">
+      <Layout
+        title={"Lireddit | Home"}
+        screenType="for_unverified_user"
+        showHeader={false}
+        backgroundOpacity={1}
+      >
         <Container maxWidth="lg">
           <Box
             className={styles.container}
@@ -29,7 +33,6 @@ const Home: React.FC<{}> = ({}) => {
             justifyContent="center"
             alignItems="center"
           >
-            <BackWallpaper />
             <Paper
               className={`p-box mb_22`}
               elevation={2}

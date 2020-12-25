@@ -1,8 +1,7 @@
 import { createMuiTheme, ThemeProvider } from "@material-ui/core";
-import { useRouter } from "next/router";
 import { useEffect } from "react";
-import { RecoilRoot, useSetRecoilState } from "recoil";
-import { loaderAtom } from "../recoil/atoms/loadingAtom";
+import { Provider } from 'react-redux';
+import store from "../redux/index";
 import "../styles/globals.css";
 import useCommonApplicationHooks from "../utils/customHook/useCommonApplicationHooks";
 
@@ -26,13 +25,13 @@ const theme = createMuiTheme({
 });
 
 function usePageTransitionLoader() {
-  const { setLoader, router } = useCommonApplicationHooks();
+  const { setLoaderState, router } = useCommonApplicationHooks();
   useEffect(() => {
     const handleRouteChange = () => {
-      setLoader(true);
+      setLoaderState(true);
     };
     const handleRouteComplete = () => {
-      setLoader(false);
+      setLoaderState(false);
     };
     router.events.on("routeChangeStart", handleRouteChange);
     router.events.on("routeChangeComplete", handleRouteComplete);
@@ -50,11 +49,11 @@ function MyApp({ Component, pageProps }) {
 }
 
 const EntryPoint = (props) => (
-  <ThemeProvider theme={theme}>
-    <RecoilRoot>
+  <Provider store={store}>
+    <ThemeProvider theme={theme}>
       <MyApp {...props} />
-    </RecoilRoot>
-  </ThemeProvider>
+    </ThemeProvider>
+  </Provider>
 );
 
 export default EntryPoint;
