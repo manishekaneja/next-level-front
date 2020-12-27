@@ -1,0 +1,10 @@
+mutation GroupCreation($name: String!, $memberList: [Int!]!) {
+  createNewGroup(data: { groupName: $name, membersIdList: $memberList }) {
+    id
+    username
+    groupList {
+      id
+      name
+    }
+  }
+}

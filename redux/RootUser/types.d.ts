@@ -1,6 +1,9 @@
 type StateType$RootUser = ApplicationUser & {};
 
-type ActionKeyType$RootUser = "root-user|set-user" | "root-user|reset-user";
+type ActionKeyType$RootUser =
+  | "root-user|set-user"
+  | "root-user|reset-user"
+  | "root-user|update-user";
 
 type ReducerType$RootUser = (
   initialState: StateType$RootUser,

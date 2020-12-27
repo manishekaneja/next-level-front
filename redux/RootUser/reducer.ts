@@ -10,6 +10,14 @@ const Reducer$RootUser: ReducerType$RootUser = (
         ...previousState,
         ...payload,
       };
+    case "root-user|update-user":
+      return {
+        ...previousState,
+        ...payload,
+        email: previousState.email,
+        username: previousState.username,
+        id: previousState.id,
+      };
     case "root-user|reset-user":
       return InitState$RootUser;
     default:

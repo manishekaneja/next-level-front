@@ -1,0 +1,23 @@
+query GetGroupDetailsById($grpId: Float!) {
+  fetchGroupById(groupId: $grpId) {
+    id
+    name
+    memberList {
+      username
+      firstname
+      lastname
+      id
+    }
+    transactionList {
+      id
+      message
+      amount
+      owner {
+        username
+        firstname
+        lastname
+        id
+      }
+    }
+  }
+}

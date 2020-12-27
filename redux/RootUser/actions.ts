@@ -13,6 +13,22 @@ const useRootUserSetter: ActionHook$RootUser<ApplicationUser> = () => {
   );
 };
 
+const useRootUserUpdater: ActionHook$RootUser<
+  Partial<ApplicationUser>
+> = () => {
+  const dispatch = useDispatch();
+  return useCallback(
+    (value: ApplicationUser) =>
+      dispatch<
+        DispatchObject<ActionKeyType$RootUser, Partial<ApplicationUser>>
+      >({
+        type: "root-user|update-user",
+        payload: value,
+      }),
+    [dispatch]
+  );
+};
+
 const useRootUserResetter: ActionHook$RootUser<undefined> = () => {
   const dispatch = useDispatch();
   return useCallback(
@@ -24,4 +40,4 @@ const useRootUserResetter: ActionHook$RootUser<undefined> = () => {
     [dispatch]
   );
 };
-export { useRootUserResetter, useRootUserSetter };
+export { useRootUserResetter, useRootUserSetter,useRootUserUpdater };

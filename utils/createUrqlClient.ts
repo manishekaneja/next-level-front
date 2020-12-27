@@ -67,7 +67,6 @@ export const createUrqlClient = (ssrExchange: any) => ({
               { query: MeDocument },
               _result,
               (result: LogoutMutation, query: MeQuery): MeQuery => {
-                console.log(">>", result);
                 if (result.logout) {
                   return {
                     me: {

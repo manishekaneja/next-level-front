@@ -13,7 +13,7 @@ const useLoaderStateSetter: ActionHook$BasicType<boolean> = () => {
   );
 };
 
-const useLoadingStateSetter: ActionHook$BasicType<boolean> = () => {
+const useLoginStateSetter: ActionHook$BasicType<boolean> = () => {
   const dispatch = useDispatch();
   return useCallback(
     (value: boolean) =>
@@ -79,7 +79,7 @@ const useSnackbarResetter: ActionHook$BasicType<null> = () => {
 
 export {
   useLoaderStateSetter,
-  useLoadingStateSetter,
+  useLoginStateSetter,
   useRegisterNewCall,
   useUnregisterNewCall,
   useSnackbarSetter,

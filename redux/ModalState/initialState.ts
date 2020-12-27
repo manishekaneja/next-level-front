@@ -1,5 +1,6 @@
 const InitState$ModalState: StateType$ModalState = {
-  createGroupState:false
+  createGroupState: false,
+  createTransactionState: false,
 };
 
 export { InitState$ModalState };

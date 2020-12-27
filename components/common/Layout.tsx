@@ -2,7 +2,7 @@ import {
   Button,
   Container,
   CssBaseline,
-  LinearProgress,
+  LinearProgress
 } from "@material-ui/core";
 import Head from "next/head";
 import React, { Fragment, useEffect } from "react";
@@ -11,6 +11,7 @@ import { useRootUserSetter } from "../../redux/RootUser/actions";
 import RoutesEndpoints from "../../utils/constants/routes";
 import useCommonApplicationHooks from "../../utils/customHook/useCommonApplicationHooks";
 import CreateGroup from "../Modal/CreateGroup";
+import CreateTransaction from "../Modal/CreateTransaction";
 import BackWallpaper from "./BackWallpaper";
 import Header from "./Header";
 import ShowSnackbar from "./ShowSnackbar";
@@ -44,14 +45,12 @@ const Layout: React.FC<LayoutProps> = ({
     isLoading,
   } = useCommonApplicationHooks();
   const setUser = useRootUserSetter();
-  console.log(isLoading);
   const [{ fetching, data, error }, call] = useMeQuery();
 
   useEffect(() => {
     setLoaderState(fetching);
     if (!fetching && !error && data) {
       if (screenType === "for_verified_user") {
-        console.log(data.me.errors, !data.me.user);
         if (
           !data.me ||
           (data.me &&
@@ -63,7 +62,6 @@ const Layout: React.FC<LayoutProps> = ({
           });
           router.push(RoutesEndpoints.LOGIN);
         } else {
-          console.log(data.me.user);
           setUser(data.me.user as ApplicationUser);
         }
       }
@@ -77,7 +75,6 @@ const Layout: React.FC<LayoutProps> = ({
   }, [fetching, data]);
 
   if (error) {
-    console.log({ error });
     return (
       <Fragment>
         <Button
@@ -133,12 +130,12 @@ const Layout: React.FC<LayoutProps> = ({
             display: "flex",
             justifyContent: "flex-start",
             alignItems: "stretch",
-            
           }}
         >
           {children}
         </Container>
-        <CreateGroup/>
+        <CreateGroup />
+        <CreateTransaction />
       </main>
     </>
   );

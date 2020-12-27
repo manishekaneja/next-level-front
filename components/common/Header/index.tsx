@@ -13,7 +13,6 @@ const Header: React.FC<{}> = () => {
 
   useEffect(() => {
     setLoaderState(logoutFetching);
-    console.log(logoutResponse);
   }, [logoutFetching, logoutResponse]);
   return (
     <>

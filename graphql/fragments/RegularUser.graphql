@@ -5,6 +5,7 @@ fragment RegularUser on ApplicationUser {
   username
   email
   groupList {
+    id
     name
   }
 }

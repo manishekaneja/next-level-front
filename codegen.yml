@@ -2,8 +2,12 @@ overwrite: true
 schema: "http://localhost:8000/graphql"
 documents: "graphql/**/*.graphql"
 generates:
-  graphql-tsx-gen/graphql.tsx:
+  graphql-tsx-gen/types.d.ts:
     plugins:
       - "typescript"
       - "typescript-operations"
+    config:
+      noExport: true
+  graphql-tsx-gen/graphql.ts:
+    plugins:
       - "typescript-urql"

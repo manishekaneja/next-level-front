@@ -11,11 +11,10 @@ function useDebounce<T>(
         clearTimeout(timeout);
         func(...args);
       };
-      console.log(timeout);
       clearTimeout(timeout);
       setTimeoutValue(setTimeout(later, waitTime));
     },
-    [timeout,setTimeout,func,waitTime]
+    [timeout, setTimeout, func, waitTime]
   );
 }
 

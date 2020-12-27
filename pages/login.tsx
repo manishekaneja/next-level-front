@@ -39,7 +39,6 @@ function useLoginActionHook() {
           error,
         }) => {
           if (error) {
-            console.log(error);
             setSnackbar({
               open: true,
               message: error.message,
@@ -47,8 +46,6 @@ function useLoginActionHook() {
             return;
           }
           if (errors && errors.length > 0) {
-            console.log(errors);
-
             setSnackbar({
               open: true,
               message: "OK",
@@ -59,8 +56,6 @@ function useLoginActionHook() {
         }
       )
       .catch((error) => {
-        console.log(error);
-
         setSnackbar({
           open: true,
           message: error.message,

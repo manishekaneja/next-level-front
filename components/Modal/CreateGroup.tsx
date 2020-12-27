@@ -19,8 +19,14 @@ import React, {
   useState
 } from "react";
 import { useSelector } from "react-redux";
-import { useGetUserListQuery } from "../../graphql-tsx-gen/graphql";
+import { OperationResult } from "urql";
+import {
+  useGetUserListQuery,
+  useGroupCreationMutation
+} from "../../graphql-tsx-gen/graphql";
 import { useCreateGroupStateSetter } from "../../redux/ModalState/actions";
+import { useRootUserUpdater } from "../../redux/RootUser/actions";
+import useCommonApplicationHooks from "../../utils/customHook/useCommonApplicationHooks";
 import { useUniqueNonNullDispatcher } from "../../utils/customHook/useUniqueNonNullDispatcher";
 import useDebounce from "../../utils/debounce";
 
@@ -88,9 +94,24 @@ const CreateGroup: React.FC<{}> = () => {
     (state: RootState) => state.modalState.createGroupState
   );
   const setCreateGroupState = useCreateGroupStateSetter();
+  const updateRootUser = useRootUserUpdater();
+  const [
+    { fetching: requestOnProgress, data: updatedUserData },
+    createNewGrp,
+  ] = useGroupCreationMutation();
+  const { setLoaderState } = useCommonApplicationHooks();
+  useEffect(() => {
+    setLoaderState(requestOnProgress);
+  }, [requestOnProgress, setLoaderState, updatedUserData]);
 
   return (
-    <Modal open={modalFlag} onClose={() => {}}>
+    <Modal
+      open={modalFlag}
+      onClose={() => {
+        setCreateGroupState(false);
+        resetState();
+      }}
+    >
       <Container
         maxWidth="md"
         style={{
@@ -205,7 +226,35 @@ const CreateGroup: React.FC<{}> = () => {
               Cancel
             </Button>
             <div style={{ padding: 4 }} />
-            <Button variant="contained" color="primary">
+            <Button
+              variant="contained"
+              color="primary"
+              onClick={() => {
+                createNewGrp({
+                  name: grpName,
+                  memberList: _.map(selectedValues, "id"),
+                }).then(
+                  ({
+                    data: {
+                      createNewGroup: { username, groupList },
+                    },
+                  }: OperationResult<
+                    GroupCreationMutation,
+                    Exact<{
+                      name: string;
+                      memberList: number[];
+                    }>
+                  >) => {
+                    updateRootUser({
+                      username,
+                      groupList: groupList as Group[],
+                    });
+                    setCreateGroupState(false);
+                    resetState();
+                  }
+                );
+              }}
+            >
               Create
             </Button>
           </Toolbar>

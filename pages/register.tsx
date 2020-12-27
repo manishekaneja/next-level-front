@@ -44,7 +44,6 @@ function useRegisterActionHook() {
           error,
         }) => {
           if (error) {
-            console.log(error);
             setSnackbar({
               open: true,
               message: error.message,
@@ -52,7 +51,6 @@ function useRegisterActionHook() {
             return;
           }
           if (errors && errors.length > 0) {
-            console.log(errors);
             setSnackbar({
               open: true,
               message: errors[0].message,
@@ -63,7 +61,6 @@ function useRegisterActionHook() {
         }
       )
       .catch((error) => {
-        console.log(error);
         setSnackbar({
           open: true,
           message: error.message,

@@ -1,8 +1,10 @@
 type RootState = {
   rootUser: StateType$RootUser;
   basicInfo: StateType$BasicInfoState;
-  modalState:StateType$ModalState;
+  modalState: StateType$ModalState;
+  selectedGroup: StateType$SelectedGroup;
 };
+
 type DispatchObject<T, V> = {
   type: T;
   payload: V;

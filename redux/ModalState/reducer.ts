@@ -8,9 +8,13 @@ const Reducer$ModalState: ReducerType$ModalState = (
     case "modal@@set-create-group-state":
       return {
         ...previousState,
-        createGroupState:payload as boolean
-
-      }
+        createGroupState: payload as boolean,
+      };
+    case "modal@@set-create-transaction-state":
+      return {
+        ...previousState,
+        createTransactionState: payload as boolean,
+      };
     default:
       return previousState;
   }

@@ -1,0 +1,25 @@
+mutation AddNewTransaction($message: String!, $amount: Int!, $groupId: Int!) {
+  addNewTransaction(
+    data: { groupId: $groupId, amount: $amount, message: $message }
+  ) {
+    id
+    name
+    memberList {
+      username
+      firstname
+      lastname
+      id
+    }
+    transactionList {
+      id
+      message
+      amount
+      owner {
+        username
+        firstname
+        lastname
+        id
+      }
+    }
+  }
+}

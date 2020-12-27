@@ -1,8 +1,9 @@
 type StateType$ModalState = {
   createGroupState: boolean;
+  createTransactionState:boolean;
 };
 
-type ActionKeyType$ModalState = "modal@@set-create-group-state";
+type ActionKeyType$ModalState = "modal@@set-create-group-state" | "modal@@set-create-transaction-state";
 
 type ReducerType$ModalState = (
   initialState: StateType$ModalState,
